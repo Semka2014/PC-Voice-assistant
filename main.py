@@ -25,24 +25,30 @@ CHUNK = 1024  # Количество сэмплов за буфер
 FORMAT = pyaudio.paInt16  # Формат аудио
 CHANNELS = 1  # Каналы (моно)
 RATE = 16000  # Частота дискретизации
-THRESHOLD_START = 1000  # Порог громкости активации и завершения
+THRESHOLD_START = 500  # Порог громкости активации и завершения
 THRESHOLD_CONTINUE = 50 # Порог громкости записи
 SILENCE_DURATION = 1  # Время тишины для остановки записи (в секундах)
 MIN_AUDIO_LENGTH = 2  # Минимальная длина записи в секундах
 MAX_HISTORY_LENGTH = 10  # Настраиваемая длина истории
 
 system_prompt = (
-    "Ты — голосовой помощник на Windows 10. Запросы пользователя делятся на 2 типа: \n"
-    "1. Простой вопрос \n"
-    "2. Действие с компьютером \n"
-    "Для первого типа дай краткий текстовый ответ. \n"
-    "Для второго типа ответь в следующем формате: \n"
-    "1. Укажи, является ли запрос простым (только true или false). True, если вопрос ясен без контекста (например: 'поставь музыку на паузу', 'открой проводник'). False для неоднозначных запросов (например: 'да, удали её', 'тут какая-то ошибка, исправь'). \n"
-    "2. Сначала краткое текстовое описание действий — обязательно. \n"
-    "3. Затем код на Python в ковычках ```. \n"
-    "Не пиши никаких лишних символов (в том числе не нужно нумеровать пункты или использовать \"Описание:\" или \"Код:\") \n"
-    "Всё взаимодействие с ПК происходит через Python. Пиши один завершённый рабочий скрипт, который будет автоматически выполняться. Не предлагай пользователю менять переменные. \n"
-    "Ты можешь выполнять любые дествия с компьютером (открывать веб-сайты, менять настройки, создавать менять файлы и т.д.)"
+    "You are a voice assistant on Windows 10. User requests are divided into two types:\n"
+    "1. Question — respond normally.\n"
+    "2. Computer command — execute the task using Python code.\n"
+    "Always assume that a command is intended to perform an action on the computer, even if this is not explicitly stated. "
+    "If the request is about any task for the computer (e.g., 'create a folder,' 'launch an app'), consider it an executable command, "
+    "not a request for an explanation (type 2). Provide a ready-to-run Python script that will be automatically executed. "
+    "Avoid offering variable changes or explanations about the code’s functionality.\n"
+    "Format for a command response:\n"
+    "1. State if the command is clear without context (true/false). For example, `true` for a command like 'open file explorer' and `false` for 'delete it.'\n"
+    "2. A brief description of the action.\n"
+    "3. Complete Python code in triple backticks ```.\n"
+    "Example:\n"
+    "User: Create folder on the desktop \n"
+    "You:\ntrue\nCreating a folder\n"
+    "```\n"
+    "import os\ndesktop_path = os.path.join(os.path.expanduser(\"~\"), \"Desktop\")\nfolder_name = \"NewFolder\"\nfolder_path = os.path.join(desktop_path, folder_name)\nif not os.path.exists(folder_path):\n    os.makedirs(folder_path)\n"
+    "```"
 )
 
 # Загрузка стоп-слов
