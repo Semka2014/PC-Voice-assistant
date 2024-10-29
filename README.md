@@ -14,6 +14,7 @@ Voice assistant based on ChatGPT. It can not only answer questions but also cont
 - Minimum computer load
 - Saving standard requests (speeds up the program for simple requests)
 - Flexible microphone sensitivity settings
+
 **Disadvantages**
 - Only Russian is supported (easy to fix)
 - Some answers are adapted to Windows 10 (even easier to fix)
